@@ -9,10 +9,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Card, Container, IconButton, Typography } from '@mui/material';
+import { Box, Card, Container, IconButton, Typography } from '@mui/material';
 import { Edit, Delete, Save,Close } from '@mui/icons-material';
 import toast from 'react-hot-toast';
-
+import CircularProgress from '@mui/material/CircularProgress';
 const Home = () => {
  const dispatch = useDispatch();
  const { dataValue, status, error } = useSelector((state) => state.fetchData);
@@ -75,103 +75,148 @@ const Home = () => {
 };
 
  return (
-   <Container maxWidth="xd" >
-     <Card style={{marginTop:'40px', }}>
-       <Typography variant="h5" align="center" sx={{ padding: 2 }}>
-       {editRowId
+  <Container maxWidth="xd" sx={{ marginTop: 5 }}>
+  <Card sx={{ padding: 3, boxShadow: 3 }}>
+    <Typography
+      variant="h5"
+      align="center"
+      sx={{
+        padding: 2,
+        fontWeight: 'bold',
+        color: 'primary.main',
+      }}
+    >
+      {editRowId
         ? `Edit Employee of ${editableRow.employee_name}`
         : 'All Employee Data'}
-       </Typography>
-       <TableContainer component={Paper} sx={{ maxHeight: 600 }}> {/* Set fixed height */}
-         <Table stickyHeader>
-           <TableHead>
-             <TableRow>
-               <TableCell>ID</TableCell>
-               <TableCell>Employee Name</TableCell>
-               <TableCell>Employee Age</TableCell>
-               <TableCell>Employee Salary</TableCell>
-               <TableCell align="center">Actions</TableCell>
-             </TableRow>
-           </TableHead>
-           <TableBody>
-             {status === 'loading' ? (
-               <TableRow>
-                 <TableCell colSpan={5} align="center">
-                   Loading...
-                 </TableCell>
-               </TableRow>
-             ) : dataValue.length > 0 ? (
-               dataValue.map((employee) => (
-                 <TableRow key={employee.id}>
-                   <TableCell>{employee.id}</TableCell>
-                   <TableCell>
-                     {editRowId === employee.id ? (
-                       <input
-                         name="employee_name"
-                         value={editableRow.employee_name}
-                         onChange={handleInputChange}
-                       />
-                     ) : (
-                       employee.employee_name
-                     )}
-                   </TableCell>
-                   <TableCell>
-                     {editRowId === employee.id ? (
-                       <input
-                         name="employee_age"
-                         value={editableRow.employee_age}
-                         onChange={handleInputChange}
-                       />
-                     ) : (
-                       employee.employee_age
-                     )}
-                   </TableCell>
-                   <TableCell>
-                     {editRowId === employee.id ? (
-                       <input
-                         name="employee_salary"
-                         value={editableRow.employee_salary}
-                         onChange={handleInputChange}
-                       />
-                     ) : (
-                       employee.employee_salary
-                     )}
-                   </TableCell>
-                   <TableCell align="center">
-                   {editRowId === employee.id ? (
-                     <>
-                       <IconButton onClick={() => handleSaveClick(employee.id)}>
-                         <Save />
-                       </IconButton>
-                       <IconButton onClick={handleCancelEdit}>
-                         <Close />
-                       </IconButton>
-                     </>
-                   ) : (
-                     <>
-                       <IconButton onClick={() => handleEditClick(employee)}>
-                         <Edit />
-                       </IconButton>
-                       <IconButton onClick={() => handleDeleteClick(employee.id)}>
-                         <Delete />
-                       </IconButton>
-                     </>
-                   )}
-                 </TableCell>
-                 </TableRow>
-               ))
-             ) : (
-               <TableRow>
-                 <TableCell colSpan={5} align="center">
-                   <Typography variant="h6">No data found</Typography>
-                 </TableCell>
-               </TableRow>
-             )}
-           </TableBody>
-         </Table>
-       </TableContainer>
-     </Card>
-   </Container>
+    </Typography>
+    <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
+      <Table stickyHeader>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ fontWeight: 'bold' }}>ID</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }}>Employee Name</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }}>Employee Age</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }}>Employee Salary</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }} align="center">
+              Actions
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {status === 'loading' ? (
+            <TableRow>
+              <TableCell colSpan={5} align="center">
+                <Typography variant="body1" color="text.secondary">
+                <CircularProgress />
+                </Typography>
+              </TableCell>
+            </TableRow>
+          ) : dataValue.length > 0 ? (
+            dataValue.map((employee) => (
+              <TableRow
+                key={employee.id}
+                sx={{
+                  '&:nth-of-type(odd)': {
+                    backgroundColor: 'action.hover',
+                  },
+                }}
+              >
+                <TableCell>{employee.id}</TableCell>
+                <TableCell>
+                  {editRowId === employee.id ? (
+                    <input
+                      name="employee_name"
+                      value={editableRow.employee_name}
+                      onChange={handleInputChange}
+                      style={{
+                        borderRadius: '4px',
+                        padding: '4px',
+                        width: '100%',
+                      }}
+                    />
+                  ) : (
+                    employee.employee_name
+                  )}
+                </TableCell>
+                <TableCell>
+                  {editRowId === employee.id ? (
+                    <input
+                      name="employee_age"
+                      value={editableRow.employee_age}
+                      onChange={handleInputChange}
+                      style={{
+                        borderRadius: '4px',
+                        padding: '4px',
+                        width: '100%',
+                      }}
+                    />
+                  ) : (
+                    employee.employee_age
+                  )}
+                </TableCell>
+                <TableCell>
+                  {editRowId === employee.id ? (
+                    <input
+                      name="employee_salary"
+                      value={editableRow.employee_salary}
+                      onChange={handleInputChange}
+                      style={{
+                        borderRadius: '4px',
+                        padding: '4px',
+                        width: '100%',
+                      }}
+                    />
+                  ) : (
+                    employee.employee_salary
+                  )}
+                </TableCell>
+                <TableCell align="center">
+                  {editRowId === employee.id ? (
+                    <Box>
+                      <IconButton
+                        onClick={() => handleSaveClick(employee.id)}
+                        sx={{ color: 'success.main' }}
+                      >
+                        <Save />
+                      </IconButton>
+                      <IconButton onClick={handleCancelEdit} sx={{ color: 'error.main' }}>
+                        <Close />
+                      </IconButton>
+                    </Box>
+                  ) : (
+                    <Box>
+                      <IconButton
+                        onClick={() => handleEditClick(employee)}
+                        sx={{ color: 'primary.main' }}
+                      >
+                        <Edit />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => handleDeleteClick(employee.id)}
+                        sx={{ color: 'error.main' }}
+                      >
+                        <Delete />
+                      </IconButton>
+                    </Box>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={5} align="center">
+                <Typography variant="h6" color="text.secondary">
+                  No data found
+                </Typography>
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  </Card>
+</Container>
  );
 };
 
